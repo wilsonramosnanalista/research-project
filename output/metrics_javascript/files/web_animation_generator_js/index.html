@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - web/animation_generator.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato.css" rel="stylesheet" type="text/css">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="https://github.com/the-simian/es6-plato">ES6 Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+      <li class="active">
+        <a href="display.html">Summary Display</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>web/animation_generator.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">68.06</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">99</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">37.61</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.88</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">
+/**** Variable and Constants Declarations ****/
+
+const DEFAULT_BALL_Y = 650;
+const INITIAL_VELOCITY = 0.85;
+const MARGIN = 20;
+const GAME_X = 65;
+const GAME_Y = CANVAS_BASE - 78;
+const GAME_WIDTH = CANVAS_WIDTH;
+const GAME_HEIGHT = CANVAS_HEIGHT;
+const GAME_RIGHT = GAME_X + GAME_WIDTH;
+const GAME_TOP = GAME_Y + GAME_HEIGHT;
+
+var speed = INITIAL_VELOCITY;
+var gameBall = new GameObject(&#039;ball&#039;, 0, 0, BALL_WIDTH, BALL_HEIGHT);
+var playerBar = new GameObject(&#039;bar&#039;, 0, BAR_BASE_DISTANCE, BAR_WIDTH, BAR_HEIGHT);
+var renderer = this.getField(&#039;renderer&#039;);
+
+
+/**** Functions ****/
+
+// Performs the initial game setup, configuring objects, state variables, and starting conditions
+function setupGame() {
+    gameBall.x = randomBallX();
+    gameBall.y = DEFAULT_BALL_Y;
+    gameBall.dirX = 2;
+    gameBall.dirY = 2;    
+    speed = INITIAL_VELOCITY; 
+    global.mouseX = GAME_X + (GAME_WIDTH / 2);
+    hideStripes();
+}
+
+// Helper: Random X within boundaries
+function randomBallX() {
+    return GAME_X + Math.floor(Math.random() * (GAME_WIDTH - gameBall.w));
+}
+
+// Hide sensors
+function hideStripes() {
+    for (var fx = 0; fx &lt; 197; fx++) {
+        var stripe = this.getField(&#039;stripe&#039; + fx);
+        if (stripe) stripe.display = display.hidden;    
+    }
+}
+
+// Draws all game objects on screen
+function draw() {    
+    playerBar.x = getClampedBarX();
+    gameBall.draw();
+    playerBar.draw();
+}
+
+// Updates game logic
+function update() {
+    checkCollision();
+    gameBall.x += gameBall.dirX * speed;
+    gameBall.y += gameBall.dirY * speed;
+}
+
+// Mouse Clamping Logic
+function getClampedBarX() {
+    var targetX = global.mouseX - (playerBar.w / 2);
+    if (targetX &lt; GAME_X) targetX = GAME_X;
+    if (targetX &gt; GAME_RIGHT - playerBar.w) targetX = GAME_RIGHT - playerBar.w;
+    return targetX;
+}
+
+// Physics logic for boundaries and bar
+function checkCollision() {
+    if (gameBall.x + (gameBall.dirX * speed) + gameBall.w + 3 &gt; GAME_RIGHT || 
+        gameBall.x + (gameBall.dirX * speed) &lt; GAME_X) {
+        gameBall.dirX = -gameBall.dirX;
+    }
+    if (gameBall.y + (gameBall.dirY * speed) + gameBall.h + 3 &gt;= GAME_TOP) {
+        gameBall.dirY = -gameBall.dirY;
+    } 
+    else if (gameBall.y + (gameBall.dirY * speed) &lt; playerBar.y + playerBar.h) {
+        if (gameBall.x + gameBall.w &gt; playerBar.x &amp;&amp; gameBall.x &lt; playerBar.x + playerBar.w) {
+            gameBall.dirY = -gameBall.dirY;
+        } else if (gameBall.y + (gameBall.dirY * speed) &lt; GAME_Y) {
+            endGame();
+        }
+    } 
+    else if (gameBall.y + (gameBall.dirY * speed) &lt; GAME_Y) {
+        endGame();
+    }
+}
+
+// Reset loop and flags
+function endGame() {
+    global.initialized = false;
+    app.clearInterval(global.gameLoop);
+    initialize();
+}
+
+
+/**** Main Code ****/
+app.clearInterval(&quot;Inicialize&quot;);
+initialize();</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
