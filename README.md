@@ -1,38 +1,38 @@
-# Projeto de Jogos Interativos em Documentos Digitais
+# _Game Engine_ para Relização de Jogos em Documentos PDF
 
-Este projeto permite a geração de um arquivo PDF executável contendo um jogo interativo que roda diretamente no leitor de documentos do navegador.
+Este projeto permite a geração de um arquivo PDF executável contendo um jogo interativo que roda diretamente no leitor de documentos de seu navegador.
 
 ## Pré-requisitos
 
 * Você precisa ter o **Python** instalado em seu sistema.
-* Os arquivos PDF foram testados com sucesso nos navegadores **Google Chrome**, **Opera**, **Brave** e **Vivaldi**, para os sistemas operacionais **Windows**, **Linux** e **macOS**.
+* Utilizar um dos seguintes leitores: **Google Chrome**, **Opera**, **Brave** ou **Vivaldi**. Os PDF interativos foram testados com sucesso nestes navegadores para os sistemas operacionais **Windows**, **Linux** e **macOS**.
 
 ---
 
-## Passo a Passo para Configuração e Execução
+## Passo a Passo para Configuração de Ambiente e Utilização do Motor
 
-### Passo 1: Instalar o Python e Verificar a Configuração
+### Passo 1: Instalar o _Python_ e Verificar a Configuração
 
-1. Baixe e instale o Python para Windows através do [site oficial do Python](https://www.python.org/).
-2. **Crucial:** Durante a instalação, certifique-se de marcar a caixa que diz **"Add Python to PATH"** ou **"Add python.exe to PATH"** antes de avançar.
-3. Para verificar se a instalação foi bem-sucedida:
-   * Abra o Prompt de Comando (CMD) ou o PowerShell.
+1. Baixe e instale o _Python_ através do [site oficial do Python](https://www.python.org/).
+   * Durante a instalação, certifique-se de marcar a caixa que diz **"Add Python to PATH"** ou **"Add python.exe to PATH"** antes de avançar.
+2. Para verificar se a instalação foi bem-sucedida:
+   * Abra o _Prompt_ de Comando (CMD) ou o _PowerShell_;
    * Execute o seguinte comando:
      ```bash
      python --version
      ```
-   * Você deverá ver a versão instalada do Python (ex: `Python 3.10.6`).
+   * Você deverá ver a versão instalada do _Python_ (ex: `Python 3.10.6`).
 
 > 💡 *Nota: Se você encontrar um erro informando que o comando 'python' não foi reconhecido, significa que a caixinha do "PATH" não foi marcada. Pode ser necessário reinstalar o Python marcando a opção ou adicionar o caminho manualmente nas Variáveis de Ambiente do Windows.*
 
 ### Passo 2: Baixar e Extrair o Projeto
 
-1. Faça o download do arquivo ZIP do projeto diretamente aqui no repositório do GitHub.
+1. Faça o download do arquivo ZIP do projeto diretamente aqui no repositório do _GitHub_.
 2. Extraia o conteúdo do arquivo ZIP em uma pasta de sua preferência no seu computador.
 
 ### Passo 3: Navegar até a Pasta do Projeto
 
-1. Abra o Prompt de Comando (CMD) ou o PowerShell.
+1. Abra o _Prompt_ de Comando (CMD) ou o _PowerShell_;
 2. Use o comando `cd` para navegar até o diretório raiz onde você extraiu a pasta do projeto.
    * *Exemplo:*
      ```bash
@@ -41,28 +41,34 @@ Este projeto permite a geração de um arquivo PDF executável contendo um jogo 
 
 ### Passo 4: Instalar as Dependências
 
-1. Atualize o gerenciador de pacotes do Python (`pip`) executando:
+1. Atualize o gerenciador de pacotes do _Python_ (`pip`) executando:
    ```bash
    python -m pip install --upgrade pip
    ```
-2. Instale as dependências de manipulação estrutural de PDF necessárias para o projeto (como a biblioteca pdfrw):
+2. Instale as dependências de manipulação estrutural de PDF necessárias para o projeto (como a biblioteca _pdfrw_):
     ```bash
     python -m pip install pdfrw
     ```
 
 ### Passo 5: Abrir o Projeto no VS Code
-1. Abra o Visual Studio Code (VS Code).
-2. No menu superior, vá em File > Open Folder... (Arquivo > Abrir Pasta) e selecione a pasta raiz do projeto extraída no Passo 2.
+1. Abra o _Visual Studio Code_ (_VS Code_);
+2. No menu superior, vá em _File > Open Folder_ (Arquivo > Abrir Pasta) e selecione a pasta raiz do projeto extraída no Passo 2.
 
-### Passo 6: Executar o Script de Geração
-1. Abra o Terminal Integrado no VS Code pressionando Ctrl + ' ou indo no menu em Terminal > New Terminal.
-2. Execute o script gerador com o comando:
+### Passo 6: Executar o Script de Geração do PDF
+1. Abra o Terminal Integrado no _VS Code_ indo no menu em _Terminal > New Terminal_;
+2. Execute o _script_ gerador com o comando:
     ```bash    
-    python .\pdf_generator.py
+    python main.py game_demo
     ```
-3. O script será executado e criará o arquivo de saída interativo chamado game_demo.pdf diretamente na pasta do seu projeto.
+3. O _script_ será executado e criará o arquivo de saída interativo chamado _game_demo.pdf_ diretamente na pasta _"\output\games"_ do seu projeto;
+4. O PDF jogável abrirá automaticamente para apreciação.
+   * Caso queira gerar e executar outro jogo, basta alterar o nome _"game_demo"_.
+   * *Exemplo:*
+     ```bash
+     python main.py game_allegro
+     ```
+     
+### Demonstração em Vídeo (_Gameplay_)
+Assista ao vídeo demonstrativo com a _gameplay_ do jogos/animação executando de forma fluida e em tempo real dentro do documento PDF:
 
-### Demonstração em Vídeo (Gameplay)
-Assista ao vídeo demonstrativo completo com a gameplay do jogos e animação rodando de forma fluida e em tempo real dentro do documento PDF:
-
-📺 Game Engine para Realização de Jogos em Documentos PDF
+📺 [Game Engine para Realização de Jogos em Documentos PDF](https://www.youtube.com/watch?v=bzbTFK3NDpw)
