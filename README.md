@@ -74,4 +74,6 @@ Este projeto permite a geração de um arquivo PDF contendo um jogo interativo e
 ### Demonstração em Vídeo (_Gameplay_)
 Assista ao vídeo demonstrativo da _gameplay_, que ilustra a alta interatividade e a fluidez dos jogos/animações executando diretamente dentro do documento PDF:
 
-📺 <a href="https://www.youtube.com/watch?v=bzbTFK3NDpw" target="_blank" rel="noopener noreferrer">Game Engine para Realização de Jogos em Documentos PDF</a>
+📺 **[Vídeo demonstrativo omitido]** 
+
+*Nota: O link para a demonstração completa na plataforma de compartilhamento de vídeos será disponibilizado na versão final do documento, após a conclusão do processo de avaliação.*
