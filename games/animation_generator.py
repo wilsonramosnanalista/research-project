@@ -2,7 +2,7 @@
 
 from pdfrw.objects.pdfname import PdfName
 from pdfrw.objects.pdfdict import PdfDict
-from core.main_engine import create_widget, create_page, add_renderer
+from core.main_engine import create_widget, create_page, add_renderer, create_mouse_tracker
 from core.config import IMAGES_DIR, load_js
 
 
@@ -23,6 +23,13 @@ BALL_HEIGHT = 70 / 5
 #### Functions ####
 
 def build():
+
+    # Dynamically builds a data dictionary from global constants, filtering primitive types for safe JavaScript injection.
+    game_constants = {
+        k: v for k, v in globals().items() 
+        if k.isupper() and isinstance(v, (int, float, str))
+    }
+
     fields = []
 
     # Character: Player Bar
@@ -42,52 +49,21 @@ def build():
     ))
 
     # Mouse Input Field
-    for x in range(0, 197):
-        stripe = create_widget(
-            'stripe' + str(x),        
-            x = 65 + x,
-            y = CANVAS_BASE - 78,
-            width = 1,
-            height = CANVAS_HEIGHT,
-            r = 0, g = 1, b = 0, 
-            field_type="text", opaque=False
-        )
-        # Event: Update global mouse coordinate on enter
-        stripe.AA = PdfDict(E=PdfDict(S=PdfName.JavaScript, JS=f"global.mouseX = {65 + x};"))
-        fields.append(stripe)
+    create_mouse_tracker(
+        fields_list=fields,
+        x_start=65,
+        count=197,
+        y_start=CANVAS_BASE - 78,
+        height=CANVAS_HEIGHT
+    )
 
     # Renderer Field    
     add_renderer(fields, 65, CANVAS_BASE - 78, CANVAS_WIDTH, CANVAS_HEIGHT)
 
     # Load JS and assemble Template
     script_js = load_js('animation_generator.js')
-    
-    js_template = """
-    var PAGE_HEIGHT = %(PAGE_HEIGHT)s;
-    var CANVAS_WIDTH = %(CANVAS_WIDTH)s;
-    var CANVAS_HEIGHT = %(CANVAS_HEIGHT)s;
-    var CANVAS_BASE = %(CANVAS_BASE)s;
-    var BAR_WIDTH = %(BAR_WIDTH)s;
-    var BAR_HEIGHT = %(BAR_HEIGHT)s;
-    var BAR_BASE_DISTANCE = %(BAR_BASE_DISTANCE)s;
-    var BALL_WIDTH = %(BALL_WIDTH)s;
-    var BALL_HEIGHT = %(BALL_HEIGHT)s;
-    %(script_js)s
-    """ % {
-        "PAGE_HEIGHT": PAGE_HEIGHT,
-        "CANVAS_WIDTH": CANVAS_WIDTH,
-        "CANVAS_HEIGHT": CANVAS_HEIGHT,
-        "CANVAS_BASE": CANVAS_BASE,
-        "BAR_WIDTH": BAR_WIDTH,
-        "BAR_HEIGHT": BAR_HEIGHT,
-        "BAR_BASE_DISTANCE": BAR_BASE_DISTANCE,
-        "BALL_WIDTH": BALL_WIDTH,
-        "BALL_HEIGHT": BALL_HEIGHT,
-        "script_js": script_js
-    }
-
     # Generate the page using the Engine
-    page = create_page(fields, js_template)
+    page = create_page(fields, script_js, constants=game_constants)
 
     # Generator Configuration
     config = {
