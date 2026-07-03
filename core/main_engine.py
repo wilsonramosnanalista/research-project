@@ -155,8 +155,9 @@ def create_page(fields, js_script, constants=None):
 
     full_js_code = js_variables + js_script
 
-    ## Automatically injects an FPS counter widget into every page for real-time performance tracking
+    # Injects telemetry widgets
     create_fps_counter(fields)
+    create_latency_counter(fields)
 
     # Initializes a standard native PDF Page object with structural resources, base dimensions, and font mapping
     page = PdfDict()
@@ -281,5 +282,23 @@ def create_fps_counter(fields_list, page_width=612):
         size=10,
         text_color="0 0 0"
     )
-    
     fields_list.append(fps_field)
+
+# Creates a Latency widget
+def create_latency_counter(fields_list, page_width=612):    
+    latency_field = create_widget(
+        name="latency_counter",
+        x=page_width - 45,
+        y=338,
+        width=42,
+        height=15,
+        r=1, g=1, b=1,
+        opaque=True,
+        field_type="text",
+        value="LAT: --",
+        readonly=True,
+        font="Helv",
+        size=10,
+        text_color="0 0 0"
+    )    
+    fields_list.append(latency_field)

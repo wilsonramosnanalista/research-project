@@ -1,10 +1,16 @@
-
 /**** JavaScript Game Engine Functions ****/
 
-// Global variables for FPS monitoring
-var lastFpsUpdateTime = new Date().getTime();
+// Global variables for FPS/LAT monitoring
+var engineStartupTime = new Date().getTime();
+var lastFpsUpdateTime = engineStartupTime;
+var lastFrameTimestamp = engineStartupTime;
+var lastLatencyUpdateTime = engineStartupTime;
 var frameCount = 0;
+var latencyAccumulator = 0;
+var latencyFrameCount = 0;
+var targetInterval = 15; 
 var fpsField = getField("fps_counter");
+var latencyField = getField("latency_counter");
 
 // Object manager to simplify positioning and drawing PDF fields
 function GameObject(fieldName, x, y, w, h) {
@@ -46,8 +52,9 @@ function renderGame() {
         draw();
         update();
 
-        // Tracks performance by passing the current timestamp to the FPS counter
-        updateFpsCounter(new Date().getTime());
+        var frameTime = new Date().getTime();
+        updateFpsCounter(frameTime);
+        updateLatencyCounter(frameTime);
         
         renderer.display = display.hidden;
     } catch (e) { app.alert(e.toString()); }
@@ -64,7 +71,6 @@ function initialize() {
 
 // Calculates and updates the FPS counter on the screen
 function updateFpsCounter(currentTime) {
-
     frameCount++;
     var elapsedTime = currentTime - lastFpsUpdateTime;  // Time passed since the last update
 
@@ -78,4 +84,31 @@ function updateFpsCounter(currentTime) {
         frameCount = 0; // Resets counters for the next 1-second cycle
         lastFpsUpdateTime = currentTime;
     }
+}
+
+// Calculates and updates the Latency on the screen
+function updateLatencyCounter(currentTime) {
+    latencyFrameCount++;    
+    var actualDelta = currentTime - lastFrameTimestamp;
+    var currentLatency = actualDelta - targetInterval;
+
+    if (currentLatency < 0) currentLatency = 0;
+    
+    latencyAccumulator += currentLatency;
+    lastFrameTimestamp = currentTime;
+    
+    var elapsedTime = currentTime - lastLatencyUpdateTime;
+    if (elapsedTime >= 250) {
+        var averageLatency = Math.round(latencyAccumulator / latencyFrameCount);
+        if (latencyField) {
+            latencyField.value = "LAT: " + averageLatency;
+        }
+
+        // Resets accumulators
+        latencyFrameCount = 0;
+        latencyAccumulator = 0;
+        lastLatencyUpdateTime = currentTime;
+    }
+    
+    return currentLatency;
 }
