@@ -1,6 +1,10 @@
 
 /**** JavaScript Game Engine Functions ****/
 
+// Global variables for FPS monitoring
+var lastFpsUpdateTime = new Date().getTime();
+var frameCount = 0;
+var fpsField = getField("fps_counter");
 
 // Object manager to simplify positioning and drawing PDF fields
 function GameObject(fieldName, x, y, w, h) {
@@ -41,6 +45,9 @@ function renderGame() {
         renderer.display = display.visible;
         draw();
         update();
+
+        // Tracks performance by passing the current timestamp to the FPS counter
+        updateFpsCounter(new Date().getTime());
         
         renderer.display = display.hidden;
     } catch (e) { app.alert(e.toString()); }
@@ -53,4 +60,22 @@ function initialize() {
     
     if (typeof setupGame === "function") setupGame();
     global.gameLoop = app.setInterval('renderGame()', 15);
+}
+
+// Calculates and updates the FPS counter on the screen
+function updateFpsCounter(currentTime) {
+
+    frameCount++;
+    var elapsedTime = currentTime - lastFpsUpdateTime;  // Time passed since the last update
+
+    // Updates the display every 1 second (1000ms) to prevent lag in the PDF
+    if (elapsedTime >= 1000) {
+        var currentFps = Math.round((frameCount * 1000) / elapsedTime);
+        if (fpsField) {
+            fpsField.value = "FPS: " + currentFps;
+        }
+        
+        frameCount = 0; // Resets counters for the next 1-second cycle
+        lastFpsUpdateTime = currentTime;
+    }
 }

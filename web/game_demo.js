@@ -11,7 +11,6 @@ var speed = INITIAL_VELOCITY;
 var newGameActive = false;
 var playerBar = new GameObject('bar', (CANVAS_WIDTH - BAR_WIDTH) / 2, BAR_BASE_DISTANCE, BAR_WIDTH, BAR_HEIGHT);
 var gameBall = new GameObject('ball', 0, 0, BALL_WIDTH, BALL_HEIGHT);
-var instruction = this.getField('instruction');
 var newGameButton = this.getField('newGameButton');
 var scoreArea = this.getField('scoreArea');
 var mouseWarning = this.getField('mouseWarning');
@@ -117,15 +116,13 @@ function resetGameView() {
     }
     
     start_screen.display = display.visible;
-    newGameButton.display = display.visible;
-    instruction.display = display.visible;
+    newGameButton.display = display.visible;    
 }
 
 // Logic for button interaction
 function onNewGameClick() {    
     start_screen.display = display.hidden;
-    newGameButton.display = display.hidden;
-    instruction.display = display.hidden;    
+    newGameButton.display = display.hidden;    
     gameBall.field.display = display.visible;
     playerBar.field.display = display.visible;
     scoreArea.display = display.visible;    

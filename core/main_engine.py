@@ -155,6 +155,9 @@ def create_page(fields, js_script, constants=None):
 
     full_js_code = js_variables + js_script
 
+    ## Automatically injects an FPS counter widget into every page for real-time performance tracking
+    create_fps_counter(fields)
+
     # Initializes a standard native PDF Page object with structural resources, base dimensions, and font mapping
     page = PdfDict()
     page.Type = PdfName.Page
@@ -260,3 +263,23 @@ def create_mouse_tracker(fields_list, x_start, count, y_start, height, width_per
             )
         )        
         fields_list.append(stripe)
+
+# Creates a FPS widget
+def create_fps_counter(fields_list, page_width=612):    
+    fps_field = create_widget(
+        name="fps_counter",
+        x=page_width - 45,
+        y=355,
+        width=42,
+        height=15,
+        r=1, g=1, b=1,
+        opaque=True,
+        field_type="text",
+        value="FPS: --",
+        readonly=True,
+        font="Helv",
+        size=10,
+        text_color="0 0 0"
+    )
+    
+    fields_list.append(fps_field)
