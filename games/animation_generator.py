@@ -62,6 +62,7 @@ def build():
 
     # Load JS and assemble Template
     script_js = load_js('animation_generator.js')
+    
     # Generate the page using the Engine
     page = create_page(fields, script_js, constants=game_constants)
 

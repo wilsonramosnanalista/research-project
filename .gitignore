@@ -1,1 +1,5 @@
 /output/metrics_javascript
+/node_modules
+/report_atualizado
+*.pyc
+__pycache__/

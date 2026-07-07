@@ -121,6 +121,7 @@ def build():
         js_action="onNewGameClick()"
     )
     fields.append(newGameButton)
+    
     # JavaScript loading and setup
     script_js = load_js('game_demo.js')
     

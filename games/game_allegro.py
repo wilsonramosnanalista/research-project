@@ -88,6 +88,7 @@ def build():
     
     # JavaScript loading and setup
     script_js = load_js('game_allegro.js')
+    
     # Creates the page linking widgets to the JavaScript logic
     page = create_page(fields, script_js, constants=game_constants)
 

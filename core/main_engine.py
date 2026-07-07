@@ -64,16 +64,11 @@ def create_widget(name, x, y, width, height, r=1, g=1, b=1, opaque=None, field_t
         
         da_string = f"/{font_name} {font_size} Tf {text_color} rg"
         widget.DA = PdfString.encode(da_string)
-
-        # Binds a custom JavaScript action to the native PDF keyboard keystroke event
+        
         on_key_stroke = kwargs.get("on_key_stroke")
         if on_key_stroke:
-            widget.AA = PdfDict(
-                K=PdfDict(
-                    S=PdfName.JavaScript,
-                    JS=PdfString.encode(on_key_stroke)
-                )
-            )
+            # Binds JS action to native /AA /K keystroke event
+            widget.AA = PdfDict(K=create_js_action(on_key_stroke))
 
     # BUTTON
     elif field_type == "button":
@@ -101,15 +96,12 @@ def create_widget(name, x, y, width, height, r=1, g=1, b=1, opaque=None, field_t
             widget.MK.CA = PdfString.encode(label)
             
         # Sets the default font type, size, and text color for push buttons
-        widget.DA = "/Cour 18 Tf 0 0 0 rg"
-            
-        # Encapsulates the JavaScript execution trigger for button click events
+        widget.DA = "/Cour 18 Tf 0 0 0 rg"            
+       
         js_action = kwargs.get("js_action")
         if js_action:
-            widget.A = PdfDict(
-                S=PdfName.JavaScript,
-                JS=PdfString.encode(js_action)
-            )
+            # Buttons use direct /A key without passing through /AA
+            widget.A = create_js_action(js_action)
     
     return widget
 
@@ -176,27 +168,21 @@ def create_page(fields, js_script, constants=None):
         ET
         """
 
-    # Binds JavaScripts to be executed when the PDF document is opened
-    page.AA = PdfDict()
-    page.AA.O = create_js_action("""
-    try {
-    %s
-    } catch (e) {
-    app.alert(e.message);
-    }
-        """ % (full_js_code))
-
+    # Pass True to inject runtime error handling natively
+    page.AA = PdfDict(O=create_js_action(full_js_code, with_try_catch=True))
     page.Annots = PdfArray(fields)
 
     return page
 
-# Binds a JavaScript action to a created field, button or page
-def create_js_action(js_code):    
-    action = PdfDict()
-    action.S = PdfName.JavaScript
-    action.JS = js_code
-
-    return action
+#Factory function that encapsulates raw JavaScript strings into native PDF JavaScript Action dictionaries, with optional try-catch routing.
+def create_js_action(js_code, with_try_catch=False):   
+    if with_try_catch:
+        js_code = f"try {{\n{js_code}\n}} catch (e) {{ app.alert(e.message); }}"
+        
+    return PdfDict(
+        S=PdfName.JavaScript,
+        JS=PdfString.encode(js_code)
+    )
 
 # Insert an image into a PDF at a specific position
 def insert_image(input_pdf, image_path, width, height, x=0, y=0):
