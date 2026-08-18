@@ -64,7 +64,7 @@ def build():
     script_js = load_js('animation_generator.js')
     
     # Generate the page using the Engine
-    page = create_page(fields, script_js, constants=game_constants)
+    page = create_page(fields, script_js, page_width=PAGE_WIDTH, page_height=PAGE_HEIGHT, constants=game_constants)
 
     # Generator Configuration
     config = {

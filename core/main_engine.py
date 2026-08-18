@@ -133,15 +133,15 @@ def add_renderer(fields, x, y, width, height):
     fields.append(renderer)
     return renderer
 
-# Generates a PDF-compatible page script by dynamically injection game constants into the JavaScript engine
-def create_page(fields, js_script, constants=None):
+# Generates a PDF-compatible page script by dynamically injecting game constants into the JavaScript engine
+def create_page(fields, js_script, page_width, page_height, constants=None):
     js_variables = ""
     
     if constants:
         for key, value in constants.items():
             # Formats values with proper JavaScript syntax depending on their data type
             if isinstance(value, str):
-                js_variables += f"var {key} = \"{value}\";\n"
+                js_variables += f'var {key} = "{value}";\n'
             else:
                 js_variables += f"var {key} = {value};\n"
 
@@ -151,7 +151,7 @@ def create_page(fields, js_script, constants=None):
     create_fps_counter(fields)
     create_latency_counter(fields)
 
-    # Initializes a standard native PDF Page object with structural resources, base dimensions, and font mapping
+    # Initializes a standard native PDF Page object with structural resources and dimensions
     page = PdfDict()
     page.Type = PdfName.Page
     page.Resources = PdfDict()
@@ -160,7 +160,10 @@ def create_page(fields, js_script, constants=None):
     page.Resources.Font.F1.Type = PdfName.Font
     page.Resources.Font.F1.Subtype = PdfName.Type1
     page.Resources.Font.F1.BaseFont = PdfName.Helvetica
-    page.MediaBox = PdfArray([0, 0, 612, 792])
+
+    # Defines the page dimensions according to the parameters provided
+    page.MediaBox = PdfArray([0, 0, page_width, page_height])
+
     page.Contents = PdfDict()
     page.Contents.stream = """
         BT

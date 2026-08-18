@@ -124,10 +124,10 @@ def build():
     
     # JavaScript loading and setup
     script_js = load_js('game_demo.js')
-    
-    # Creates the page linking widgets to the JavaScript logic
-    page = create_page(fields, script_js, constants=game_constants)
 
+    # Creates the page linking widgets to the JavaScript logic
+    page = create_page(fields, script_js, page_width=PAGE_WIDTH, page_height=PAGE_HEIGHT, constants=game_constants)
+    
     # Rendering Configuration: background and dimensions
     config = {
         "background": str(IMAGES_DIR / "background_space.png"),
