@@ -71,9 +71,9 @@ Este projeto permite a geração de um arquivo PDF contendo um jogo interativo e
      python main.py game_allegro
      ```
      
-### Demonstração em Vídeo (_Gameplay_)
-Assista ao vídeo demonstrativo da _gameplay_, que ilustra a alta interatividade e a fluidez dos jogos/animações executando diretamente dentro do documento PDF:
+### Demonstração em Vídeo (*Gameplay*)
 
-📺 **[Vídeo demonstrativo omitido]** 
+Assista ao vídeo demonstrativo da *gameplay*, que ilustra a jogabilidade dos jogos/animação desenvolvidos executando diretamente dentro do documento PDF:
 
-*Nota: O link para a demonstração completa na plataforma de compartilhamento de vídeos será disponibilizado na versão final do documento, após a conclusão do processo de avaliação.*
+📺 **[Vídeo demonstrativo no YouTube](https://www.youtube.com/watch?v=tvrHXK1L3ds)**
+
