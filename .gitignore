@@ -1,5 +1,16 @@
-/output/metrics_javascript
-/node_modules
-/report_atualizado
+# Ferramentas Node.js e métricas
+node_modules/
+output/metrics_javascript/
+report_atualizado/
+package.json
+package-lock.json
+
+# Python
 *.pyc
 __pycache__/
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Testes locais
+tests/
